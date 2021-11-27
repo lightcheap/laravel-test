@@ -29,6 +29,6 @@ class HomeTest extends TestCase
     public function testBody()
     {
         $response = $this->get('/home');
-        $response->assertSeeText("本のまねして　かいたよ");
+        $response->assertSeeText("ホーム画面");
     }
 }
