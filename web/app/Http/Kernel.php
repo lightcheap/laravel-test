@@ -8,12 +8,13 @@ class Kernel extends HttpKernel
 {
     /**
      * The application's global HTTP middleware stack.
-     *
+     * グローバルミドルウェア
      * These middleware are run during every request to your application.
      *
      * @var array
      */
     protected $middleware = [
+        \App\Http\Middleware\HeaderDumper::class,  // 作成したミドルウェアを追加
         \App\Http\Middleware\TrustProxies::class,
         \App\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
