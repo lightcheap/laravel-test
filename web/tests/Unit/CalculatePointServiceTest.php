@@ -6,6 +6,7 @@ use App\Services\CalculatePointService;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CalculatePointServiceTest extends TestCase
 {
@@ -17,6 +18,7 @@ class CalculatePointServiceTest extends TestCase
             '購入金額が1000なら10ポイント'  => [10, 1000],
             '購入金額が9999なら99ポイント'  => [99, 9999],
             '購入金額が10000なら200ポイント'=> [200, 10000],
+            '購入金額がマイナス'            => [0, -1],
         ];
     }
 
@@ -57,5 +59,64 @@ class CalculatePointServiceTest extends TestCase
     {
         $result = CalculatePointService::calcPoint($amount);
         $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @test
+     * try/catchを使った例外のテスト
+     */
+    public function exception_trycathch_例外テスト()
+    {
+        try {
+            // 例外がスローされない場合はテスト失敗
+            throw new \InvalidArgumentException('message', 200);
+            $this->fail();
+        } catch (\Throwable $e) {
+            // 指定した例外クラスがスローされているか
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            // スローされた例外のコードを検証
+            $this->assertSame(200, $e->getCode());
+            // スローされた例外のメッセージを検証
+            $this->assertSame('message', $e->getMessage());
+        }
+    }
+
+    /**
+     * @test
+     * exceptedExceptionメソッドを利用したテスト
+     */
+    public function exception_expectedException_method()
+    {
+        // 指定した例外クラスがスローされているか
+        $this->expectException(\InvalidArgumentException::class);
+        // スローされた例外のコードを検証
+        $this->expectExceptionCode(200);
+        // スローされた例外のメッセージを検証
+        $this->expectExceptionMessage('message');
+
+        throw new \InvalidArgumentException('message', 200);
+    }
+
+    /**
+     * @test
+     * exceptedExceptionアノテーション利用
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionCode 200
+     * @expectedExceptionMessage message
+     */
+    public function exception_expectedException_annotation()
+    {
+        throw new \InvalidArgumentException('message', 200);
+    }
+
+
+    /**
+     * @test
+     * @exceptedException \App\Exceptions\PreConditionException
+     * @exceptedExceptionMessage 購入金額が負の数
+     */
+    public function calcPoint_購入金額が負の数なら例外スロー()
+    {
+        calculatePointService::calcPoint(-1);
     }
 }
