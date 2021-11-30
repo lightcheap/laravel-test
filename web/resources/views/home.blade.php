@@ -13,5 +13,9 @@
             <a href="/auth/login">ログイン</a>
             <a href="/auth/register">会員登録</a>
         @endif
+        @php
+            $f = new \Datetime();
+            echo $f->format('h:m:s');
+        @endphp
     </body>
 </html>
