@@ -4,23 +4,37 @@ namespace App\Services;
 
 final class Greeting
 {
+    private $time;
+
+    public function __construct()
+    {
+        $this->time = $this->nowH_i_s();
+    }
     /**
      * テスト練習のための処理
      * 時間に応じて挨拶を返す処理
      * @param string $time
      * @return string
      */
-    public function sayHello($time)
+    public function sayHello()
     {
-        if (strtotime('05:00:00') <= strtotime($time) && strtotime('12:00:00') > strtotime($time) ) {
+
+        if (strtotime('05:00:00') <= strtotime($this->time) && strtotime('12:00:00') > strtotime($this->time) ) {
             return 'おはようございます';
-        } elseif (strtotime('12:00:00') <= strtotime($time) && strtotime('18:00:00') > strtotime($time)) {
+        } elseif (strtotime('12:00:00') <= strtotime($this->time) && strtotime('18:00:00') > strtotime($this->time)) {
             return 'こんにちは';
-        } elseif (
-            strtotime('18:00:00') <= strtotime($time) && strtotime('23:59:59') >= strtotime($time)
-            || strtotime('00:00:00') <= strtotime($time) && strtotime('05:00:00') > strtotime($time)
-        ) {
+        } else {
             return 'こんばんは';
         }
+    }
+
+    /**
+     * 現在時刻を持ってくるだけの関数
+     * @return string
+     */
+    public function nowH_i_s(): string
+    {
+        $now = new \DateTime();
+        return $now->format('H:i:s');
     }
 }

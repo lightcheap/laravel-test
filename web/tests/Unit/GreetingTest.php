@@ -24,20 +24,34 @@ class GreetingTest extends TestCase
      * @test
      * @dataProvider dataProvider_for_sayHello
      */
-    public function sayHello_時間に応じた挨拶をかえすテスト(string $expected, string $time)
+    public function sayHello_時間に応じた挨拶テスト（DataProvider）(string $expected, string $time)
     {
-
         $greeting= new Greeting;
-        $greetingWords = $greeting->sayHello($time);
+        $greetingWords = $greeting->sayHello();
 
         if (strtotime('05:00:00') <= strtotime($time) && strtotime('12:00:00') > strtotime($time) ) {
             $this->assertSame($expected, $greetingWords);
         } elseif (strtotime('12:00:00') <= strtotime($time) && strtotime('18:00:00') > strtotime($time)) {
             $this->assertSame($expected, $greetingWords);
-        } elseif (
-            strtotime('18:00:00') <= strtotime($time) && strtotime('23:59:59') >= strtotime($time)
-            || strtotime('00:00:00') <= strtotime($time) && strtotime('05:00:00') > strtotime($time)
-            ) {
+        } else {
+            $this->assertSame($expected, $greetingWords);
+        }
+    }
+
+    /**
+     * @test
+     *
+     */
+    public function sayHello_時間に応じた挨拶テスト()
+    {
+        $greeting= new Greeting;
+        $greetingWords = $greeting->sayHello();
+
+        if (strtotime('05:00:00') <= strtotime($time) && strtotime('12:00:00') > strtotime($time) ) {
+            $this->assertSame($expected, $greetingWords);
+        } elseif (strtotime('12:00:00') <= strtotime($time) && strtotime('18:00:00') > strtotime($time)) {
+            $this->assertSame($expected, $greetingWords);
+        } else {
             $this->assertSame($expected, $greetingWords);
         }
     }

@@ -15,7 +15,7 @@
         @endif
         @php
             $f = new \Datetime();
-            echo $f->format('h:m:s');
+            echo $f->format('H:i:s');
         @endphp
     </body>
 </html>
